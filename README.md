@@ -23,7 +23,7 @@
     </a>
 </p>
 
-https://github.com/user-attachments/assets/2e6f8306-0fb8-4e80-bd14-dde904439cdc
+https://github.com/user-attachments/assets/02609cb7-f2dc-456d-911f-4d8de2a05f4a
 
 We present **DISCO** (**Di**stilled Tree **S**earch over **Co**ntinuous Actions), which transfers
 long-horizon reasoning from search into policies over continuous actions. DISCO runs progressive-widening
