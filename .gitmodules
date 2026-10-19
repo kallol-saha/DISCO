@@ -1,0 +1,5 @@
+[submodule "curobo"]
+	path = curobo
+	url = https://github.com/kallol-saha/curobo.git
+	branch = disco
+	ignore = untracked

@@ -1,0 +1,54 @@
+task: shelf            # shelf | stacking
+env_index: 0
+env_path: assets/environments/shelf_packing/test   # stacking: assets/environments/object_stacking/{train,test}
+num_envs: 32                         # REQUIRED to be 32 (GPU sim + cuRobo setup)
+
+# Total iterations the tree should have after this run (a loaded tree resumes
+# from root.visit_count). run_disco.py runs `block` iterations on a fresh tree each round.
+iterations: 1
+
+paths:
+  # Trees live in <trees_base>/env_<i>; an existing tree there is resumed.
+  trees_base: results/trees
+
+# Simulation budget β shared across all envs of the sweep (270000 shelf /
+# 27000 stacking). null = no cap. The counter file defaults to
+# <trees_base>/sim_budget.json.
+sim_budget: null
+sim_budget_path: null
+
+# Policy P0 (any checkpoint pair): cascaded grasp model + grasp-conditioned
+# place model.
+grasp_only_checkpoint: ???
+place_conditional_checkpoint: ???
+policy_device: cuda:0
+
+# Q-function. null = no Q̂ (first distillation round / ablation): children
+# start at Q = their progress reward.
+value_checkpoint: null
+value_device: cuda:0
+
+mcts:
+  C: 1.5
+  alpha: 0.3
+  k: 2.0
+  # Per expansion: num_grasps_per_object grasps per movable object, placements
+  # per grasp derived so the batch holds total_budget (= B) candidates.
+  num_grasps_per_object: 2
+  num_places_per_grasp: 2
+  total_budget: 32
+  # ucb: argmax UCB (Q + exploration). random: uniform among children.
+  selection_mode: ucb
+  # Descents run together per batch: their frontier vertices are expanded
+  # together (cuRobo plans each vertex in turn, the simulator executes all
+  # plans in one batch). 1 = one descent at a time.
+  parallel_descents: 1
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+defaults:
+  - _self_
+  - override hydra/job_logging: stdout   # no <job>.log in the repo root

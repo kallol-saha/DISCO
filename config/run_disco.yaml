@@ -1,0 +1,37 @@
+# run_disco.py settings. Edit here, or override on the command line:
+#   python run_disco.py task=stacking envs=[0,1]
+
+task: shelf                 # shelf | stacking
+grasp: ${task_defaults.${task}.grasp}   # P0 grasp checkpoint
+place: ${task_defaults.${task}.place}   # P0 place checkpoint
+value: null                 # initial Q checkpoint, e.g. models/<task>/value.pth; null = round 1 uses the progress reward
+out: results/disco_${task}  # trees, data, models, logs and resume state
+
+env_root: ${task_defaults.${task}.env_root}
+envs: null                  # env indices, e.g. [0, 1]; null = all envs in env_root
+
+# Search
+budget: ${task_defaults.${task}.budget}   # simulation budget β, shared by all envs
+block: 25                   # MCTS iterations per env per round (fresh tree each round)
+parallel_descents: 1        # descents expanded together per batch
+
+# Distillation
+policy_iters: 20000
+value_iters: 20000
+wandb: false
+
+# Compute
+gpus: [0, 1]
+per_gpu: 4                  # sim jobs per GPU; at most 4
+
+task_defaults:
+  shelf:
+    env_root: assets/environments/shelf_packing/train
+    budget: 270000
+    grasp: models/shelf_packing/grasp.pth
+    place: models/shelf_packing/place.pth
+  stacking:
+    env_root: assets/environments/object_stacking/train
+    budget: 27000
+    grasp: models/object_stacking/grasp.pth
+    place: models/object_stacking/place.pth

@@ -1,0 +1,19 @@
+__pycache__/
+*.egg-info
+.pytest_cache/
+.vscode/
+
+# data and weights: the assets the code needs are force-added (git add -f)
+assets/
+models/
+*.pth
+*.npz
+
+# run outputs
+results/
+logs/
+wandb/
+
+# Hugging Face download leftovers
+.cache/
+archives/
